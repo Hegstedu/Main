@@ -1,8 +1,6 @@
 
-local Crate = coroutine.wrap
+ Crate = coroutine.wrap
 
-
-local function launch()
 
 
 
@@ -498,7 +496,7 @@ local function Track(Type,clk)
 	
 	end
 
-end
+
 function sens.MakePage(mf,Name)
 	if sens.Pages[Name] == nil then
 		local Scrl = mf.PageClone:Clone()
