@@ -1,7 +1,111 @@
 
 local Crate = coroutine.wrap
 
-sens = require(11096129534)
+local sens = {}
+sens.Pages = {}
+sens.Toggles = {}
+sens.Sliders = {}
+sens.Inputs = {}
+sens.Buttons = {}
+
+function sens.MakePage(mf,Name)
+	if sens.Pages[Name] == nil then
+		Scrl = mf.PageClone:Clone()
+		Scrl.Name = "PageArray"..Name
+		Scrl.Parent = mf
+		Pg = mf.Page:Clone()
+		for i,v in pairs(Pg:GetDescendants()) do
+			if v.ClassName=="LocalScript" then
+				--	v:Destroy()
+			end
+		end
+		Pg.Visible = true
+		Pg.Name = Name
+		Pg.Text = Name
+		Pg.Parent = mf.Tab
+		local click = mf.Parent.Parent.sensoryScript:clone()
+		click.Parent = Pg
+		click.Name = "Click"
+		sens.Pages[Name] = Scrl
+	end
+end
+function sens.MakeToggle(mf,Page,Name)
+	if sens.Pages[Page] ~= nil and sens.Toggles[Name]==nil then
+		tgl = mf.Toggle:clone()
+		tgl.Parent = sens.Pages[Page]
+		tgl.TgName.Text = Name
+		tgl.Name = "Toggle"..Name
+		tgl.Visible = true
+		local click = mf.Parent.Parent.sensoryScript:clone()
+		click.Parent = tgl.ToggleFrame
+		click.Name = "Click"
+		sens.Toggles[Name] = tgl.Toggle
+	end
+end
+function sens.MakeInput(mf,Page,Name,Text)
+	if sens.Pages[Page] ~= nil and sens.Inputs[Name]==nil then
+		inpt = mf.Input:clone()
+		inpt.Parent = sens.Pages[Page]
+		inpt.Name = "Input"..Name
+		inpt.TextBox.PlaceholderText = Text
+		inpt.Visible = true
+		sens.Inputs[Name] = inpt
+	end
+end
+function sens.MakeSlider(mf,Page,Name,Max)
+	if sens.Pages[Page] ~= nil and sens.Sliders[Name]==nil then
+		sldr = mf.Slider:clone()
+		sldr.Parent = sens.Pages[Page]
+		sldr.SlName.Text = Name
+		sldr.Name = "Slider"..Name
+		sldr.Visible = true
+		maxV = Instance.new("NumberValue")
+		maxV.Name = "MaxValue"
+		maxV.Value = Max
+		maxV.Parent = sldr
+		local click = mf.Parent.Parent.sensoryScript:clone()
+		click.Parent = sldr
+		click.Name = "SlideScript"
+		sldr.SlideScript.Disabled =false
+		sldr.Count.Text = Max
+		sens.Sliders[Name] = sldr
+	end
+end
+function sens.MakeButton(mf,Page,Name)
+	if sens.Pages[Page] ~= nil and sens.Buttons[Name]==nil then
+		btn = mf.Button:Clone()
+		btn.Parent = sens.Pages[Page]
+		btn.Name = "Button"..Name
+		btn.But.Text = Name
+		btn.Visible = true
+		local click = mf.Parent.Parent.sensoryScript:clone()
+		click.Parent = btn.But
+		click.Name = "Click"
+		sens.Buttons[Name] = btn
+	end
+end
+function sens.CheckInput(mf,Page,Name)
+	if sens.Pages[Page] ~= nil and sens.Inputs[Name]~=nil then
+		return sens.Inputs[Name].TextBox.Text
+	end
+end
+function sens.CheckSlider(mf,Page,Name)
+	if sens.Pages[Page] ~= nil and sens.Sliders[Name]~=nil then
+		return sens.Sliders[Name].Count.Text
+	end
+end
+function sens.CheckToggle(mf,Page,Name)
+	if sens.Pages[Page] ~= nil and sens.Toggles[Name]~=nil then
+		return sens.Toggles[Name].Active
+	end
+end
+function sens.CheckButton(mf,Page,Name)
+	if sens.Pages[Page] ~= nil and sens.Buttons[Name]~=nil then
+		act = sens.Buttons[Name].Active
+		sens.Buttons[Name].Active = false
+		return act
+	end
+end
 local function launch()
 	
 
@@ -513,4 +617,3 @@ local function GuiButtons()
 		end)
 	end
 end
-	
